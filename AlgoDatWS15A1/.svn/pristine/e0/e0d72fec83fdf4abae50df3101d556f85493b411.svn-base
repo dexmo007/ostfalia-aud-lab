@@ -1,0 +1,135 @@
+package de.ostfalia.aud.ws15;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+/**
+ * @author Henrik and Maxi
+ */
+public class MyContactList {
+
+    private Contact[] contacts;
+
+    /**
+     * contructor for a contact list
+     *
+     * @param filename name of the file to be created
+     * @throws IOException if file does not exist or is not readable
+     */
+    public MyContactList(String filename) throws IOException {
+        File file = new File(filename);
+        FileInputStream is = new FileInputStream(file);
+        int lines = 0;
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        while (br.readLine() != null) {
+            lines++;
+        }
+        br.close();
+        br = new BufferedReader(new FileReader(file));
+        contacts = new Contact[lines];
+        String[] currentLine;
+        String lineStr;
+        int line = 0;
+        while ((lineStr = br.readLine()) != null) {
+            currentLine = lineStr.split(",");
+            Contact currentContact = new Contact(currentLine);
+            contacts[line] = currentContact;
+            line++;
+        }
+    }
+
+    /**
+     * getter for the size of the contact list
+     *
+     * @return size of the contact list
+     */
+     public int size() {
+         return contacts.length;
+     }
+
+    /**
+     * methods searches the contact list for an email and returns the name of the first result
+     *
+     * @param email email to search the contact list for
+     * @return name of the first search result
+     */
+    public String getName(String email) {
+        for (Contact element : contacts) {
+            if (element.getEmail().equalsIgnoreCase(email)) {
+                return element.getName();
+            }
+        }
+        // email not found
+        return null;
+    }
+
+    /**
+     * method to search the contact list for a name that returns the email of the first search result
+     *
+     * @param name name to search the contact list for
+     * @return email of the first search result
+     */
+    public String getEmail(String name) {
+        for (Contact element : contacts) {
+            if (element.getName().equals(name)) {
+                return element.getEmail();
+            }
+        }
+        // name not found
+        return null;
+    }
+
+    /**
+     * method removes all contacts with the given email
+     *
+     * @param mail mail identifier to delete the contacts
+     */
+    public void removeContactByMail(String mail) {
+        int foundCounter = 0;
+        for (int i = 0; i < contacts.length; i++) {
+            if (contacts[i].getEmail().equalsIgnoreCase(mail)) {
+                foundCounter++;
+            }
+        }
+        Contact[] newContacts = new Contact[contacts.length - foundCounter];
+        int counter = 0;
+        for (int i = 0; i < contacts.length; i++) {
+            if (!contacts[i].getEmail().equalsIgnoreCase(mail)) {
+                newContacts[counter] = contacts[i];
+                counter++;
+            }
+        }
+        contacts = newContacts;
+    }
+
+    //    public void removeContactByMail2(String mail) {
+//        Contact[] newContacts;
+//        for (int i = 0; i < contacts.length; i++) {
+//            if (contacts[i].getEmail().equalsIgnoreCase(mail)) {
+//                newContacts = new Contact[contacts.length - 1];
+//                newContacts.fill;
+//
+//            }
+//        }
+//
+//    }
+
+    /**
+     * counts the number of entries with a given name
+     *
+     * @param name name to count entries
+     * @return the number of entries with the given name
+     */
+    public int countEntries(String name) {
+        int counter = 0;
+        for (Contact element : contacts) {
+            if (element.getName().equals(name)) {
+                counter++;
+            }
+        }
+        return counter;
+    }
+}

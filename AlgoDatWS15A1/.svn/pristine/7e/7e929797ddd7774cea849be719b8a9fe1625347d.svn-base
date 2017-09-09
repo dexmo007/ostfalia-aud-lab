@@ -1,0 +1,88 @@
+package de.ostfalia.aud.ws15;
+
+public class Contact {
+    private String name;
+    private String firstName;
+    private String email;
+    private String streetAddress;
+    private String zipCode;
+    private String city;
+    private String phoneNumber;
+
+    public Contact(String name, String firstName, String email, String streetAddress, String zipCode,
+                   String city, String phoneNumber) {
+        this.name = name;
+        this.firstName = firstName;
+        this.email = email;
+        this.streetAddress = streetAddress;
+        this.zipCode = zipCode;
+        this.city = city;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Contact(String array[]) {
+        this.name = array[0];
+        this.firstName = array[1];
+        this.email = array[2];
+        this.streetAddress = array[3];
+        this.zipCode = array[4];
+        this.city = array[5];
+        this.phoneNumber = array[6];
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+}

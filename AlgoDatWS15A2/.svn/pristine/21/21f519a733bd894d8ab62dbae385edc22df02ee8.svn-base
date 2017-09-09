@@ -1,0 +1,158 @@
+package de.ostfalia.aud.ws15;
+import de.ostfalia.aud.ws15.comparators.EmailOnlyComparator;
+import de.ostfalia.aud.ws15.comparators.EmailFirstComparator;
+import de.ostfalia.aud.ws15.comparators.NameOnlyComparator;
+import de.ostfalia.aud.ws15.comparators.NameFirstComparator;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.FileReader;
+import java.io.File;
+
+/**
+ * @author Henrik and Maxi
+ */
+public class MyContactList {
+
+    public Contact[] contactsEmailFirst;
+    public Contact[] contactsNameFirst;
+    public int numberOfComparisons = 0;
+
+    /**
+     * contructor for a contact list
+     *
+     * @param filename name of the file to be created
+     * @throws IOException if file does not exist or is not readable
+     */
+    public MyContactList(String filename) throws IOException {
+        numberOfComparisons = 0;
+        File file = new File(filename);
+        int lines = 0;
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        while (br.readLine() != null) {
+            lines++;
+        }
+        br.close();
+        br = new BufferedReader(new FileReader(file));
+        contactsEmailFirst = new Contact[lines];
+        String[] currentLine;
+        String lineStr;
+        int line = 0;
+        while ((lineStr = br.readLine()) != null) {
+            lineStr = lineStr.replaceAll("\"", "");
+            currentLine = lineStr.split(",");
+            Contact currentContact = new Contact(currentLine);
+            contactsEmailFirst[line] = currentContact;
+            line++;
+        }
+        contactsNameFirst = Sorter.mergeSort(contactsEmailFirst, new NameFirstComparator());
+        Sorter.quickSort(contactsEmailFirst, new EmailFirstComparator());
+    }
+
+    /**
+     * getter for the size of the contact list
+     *
+     * @return size of the contact list
+     */
+     public int size() {
+         return contactsEmailFirst.length;
+     }
+
+    /**
+     * methods searches the contact list for an email and returns the name of the first result
+     *
+     * @param email email to search the contact list for
+     * @return name of the first search result
+     */
+    public String getName(String email) {
+        int foundIndex = Sorter.binSearch(contactsEmailFirst, Contact.mailOnlyContact(email), new EmailOnlyComparator());
+        return foundIndex == -1 ? null : contactsEmailFirst[foundIndex].getName();
+    }
+
+    /**
+     * method to search the contact list for a name that
+     * returns the email of the first search result
+     *
+     * @param name name to search the contact list for
+     * @return email of the first search result
+     */
+    public String getEmail(String name) {
+        int index = Sorter.binSearch(contactsNameFirst, Contact.nameOnlyContact(name), new NameOnlyComparator());
+        return index == -1 ? null : contactsNameFirst[index].getEmail();
+    }
+
+    /**
+     * Does several search statements to put them together in a string array
+     * @param name name that will be searched for
+     * @return returns a String array with all the Email address that match the name
+     */
+    public String[] getEmails(String name) {
+        String[] results = new String[contactsNameFirst.length];
+        int counter = 0;
+        //TODO remove double entries
+        for (int index = -1; index < contactsNameFirst.length - 1; ) {
+            index = Sorter.binFindFirst(contactsNameFirst, Contact.nameOnlyContact(name), new NameFirstComparator());
+
+            if (index != -1) {
+                results[counter] = contactsNameFirst[index].getEmail();
+                counter++;
+            } else {
+                break;
+            }
+        }
+        return results;
+    }
+
+    /**
+     * method removes all contactsEmailFirst with the given email
+     *
+     * @param mail mail identifier to delete the contactsEmailFirst
+     */
+    public void removeEntriesByMail(String mail) {
+        int foundCounter = Sorter.binCountEntries(contactsEmailFirst, Contact.mailOnlyContact(mail), new EmailOnlyComparator());
+        if (foundCounter == 0) {
+            return;
+        }
+        int firstIndex = Sorter.binFindFirst(contactsEmailFirst, Contact.mailOnlyContact(mail), new EmailOnlyComparator());
+        Contact[] newContacts = new Contact[contactsEmailFirst.length - foundCounter];
+//        int counter = 0;
+//        for (int i = 0; i < contactsEmailFirst.length; i++) {
+//            if (!contactsEmailFirst[i].getEmail().equalsIgnoreCase(mail)) {
+//                newContacts[counter] = contactsEmailFirst[i];
+//                counter++;
+//            }
+//        }
+        int newIndex = 0;
+        for (int i = 0; i < contactsEmailFirst.length; i++) {
+            if (i < firstIndex || i >= firstIndex + foundCounter) {
+                newContacts[newIndex] = contactsEmailFirst[i];
+                newIndex++;
+            }
+        }
+        contactsEmailFirst = newContacts;
+        contactsNameFirst = Sorter.mergeSort(contactsEmailFirst, new NameFirstComparator());
+    }
+
+    /**
+     * counts the number of entries with a given name
+     *
+     * @param name name to count entries
+     *
+     * @return the number of entries with the given name
+     */
+    public int countEntries(String name) {
+        return Sorter.binCountEntries(contactsNameFirst, Contact.nameOnlyContact(name), new NameOnlyComparator());
+    }
+
+    public int getFirstLocationOf(String email) {
+        return Sorter.binSearch(contactsEmailFirst, Contact.mailOnlyContact(email), new EmailOnlyComparator());
+    }
+
+    public int getLastLocationOf(String email) {
+        return 0;
+    }
+
+    public String emailAtLocation(int i) {
+        return contactsEmailFirst[i].getEmail();
+    }
+}

@@ -1,0 +1,40 @@
+package de.ostfalia.aud.ws15;
+
+import java.util.Comparator;
+
+/**
+ * Created by Henrik on 10/28/2015.
+ * @author Henrik and Maxi
+ */
+public class Sorter {
+    public static <T> void quickSort(T[] objects, Comparator<T> comparator) {
+        if (objects == null) {
+            return;
+        }
+        recQuickSort(objects, 0, objects.length - 1, comparator);
+        return;
+    }
+    public static <T> void recQuickSort(T[] objects, int leftBound, int rightBound, Comparator<T> comparator) {
+        if (rightBound <= leftBound) {
+            return;
+        }
+        T pivot = objects[rightBound];
+        int wall = leftBound;
+        for (int i = leftBound; i < rightBound; i++) {
+            T currentElement = objects[i];
+            if (comparator.compare(currentElement, pivot) < 0) {
+                // swop current element with the element next to the wall
+                objects[i] = objects[wall];
+                objects[wall] = currentElement;
+                wall++;
+            }
+        }
+        //swop pivot element with the element next to the wall
+        objects[rightBound] = objects[wall];
+        objects[wall] = pivot;
+
+        recQuickSort(objects, leftBound, wall - 1, comparator);
+        recQuickSort(objects, wall + 1, rightBound, comparator);
+    }
+
+}

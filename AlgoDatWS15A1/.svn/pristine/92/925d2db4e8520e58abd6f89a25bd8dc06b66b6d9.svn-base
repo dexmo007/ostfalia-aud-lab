@@ -1,0 +1,29 @@
+package de.ostfalia.aud.ws15;
+
+import java.io.IOException;
+
+/**
+ * @author Henrik and Maxi
+ */
+public class MyContactListTest {
+    /**
+     * main method tseting the contact list class
+     *
+     * @param args arguments
+     */
+    public static void main(String[] args) {
+        try {
+            MyContactList myContactList = new MyContactList(
+                    "C:/Users/Henrik/Documents/Ostfalia/S2_AuD_Lab/Testdaten/scaleUp/Contacts25k.csv");
+            System.out.println(myContactList.size());
+            System.out.println(myContactList.getName("LeonBecker@cuvox.de"));
+            System.out.println(myContactList.getEmail("Becker"));
+            myContactList.removeContactByMail("LeonBecker@cuvox.de");
+            System.out.println(myContactList.size());
+            System.out.println(myContactList.getName("LeonBecker@cuvox.de"));
+            System.out.println(myContactList.getEmail("Becker"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}

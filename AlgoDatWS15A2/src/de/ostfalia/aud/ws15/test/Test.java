@@ -1,0 +1,41 @@
+package de.ostfalia.aud.ws15.test;
+
+import de.ostfalia.aud.ws15.Contact;
+import de.ostfalia.aud.ws15.MyContactList;
+import de.ostfalia.aud.ws15.Sorter;
+import de.ostfalia.aud.ws15.comparators.EmailOnlyComparator;
+import de.ostfalia.aud.ws15.comparators.NameOnlyComparator;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
+
+/**
+ * Created by Henrik on 10/29/2015.
+ */
+public class Test {
+    public static void main(String[] args) {
+//        String[] strings = {"peter", "jackson", "charlie", "harper", "acdc"};
+//        Comparator<String> cp = new Comparator<String>() {
+//            @Override
+//            public int compare(String o1, String o2) {
+//                return o1.compareTo(o2);
+//            }
+//        };
+//        Sorter.quickSort(strings, cp);
+//        System.out.println(Arrays.toString(strings));
+//        System.out.println(Sorter.binSearch(strings, "rgrgr", cp));
+        MyContactList mc;
+        try {
+            mc = new MyContactList("F:/Dokumente/Studium/WS1516/Algorithmen und Datenstrukturen/Programmieren/Prog/AlgoDatWS15A2/Materialien/Contacts25k.csv");
+            String[] emails = mc.getEmails("Koenig");
+            for (String email : emails) {
+                if (email != null) {
+                    System.out.println(email);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}

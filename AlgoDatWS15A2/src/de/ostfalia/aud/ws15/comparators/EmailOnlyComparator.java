@@ -1,0 +1,16 @@
+package de.ostfalia.aud.ws15.comparators;
+
+import de.ostfalia.aud.ws15.Contact;
+
+import java.util.Comparator;
+
+/**
+ * @author Henrik and Maxi
+ * Created by Henrik on 10/30/2015.
+ */
+public class EmailOnlyComparator implements Comparator<Contact> {
+    @Override
+    public int compare(Contact o1, Contact o2) {
+        return o1.getEmail().compareToIgnoreCase(o2.getEmail());
+    }
+}

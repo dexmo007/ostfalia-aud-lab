@@ -1,0 +1,14 @@
+package de.ostfalia.aud.ws15;
+
+import java.util.Comparator;
+
+/**
+ * Created by Henrik on 10/28/2015.
+ */
+public class NameFirstComparator implements Comparator<Contact> {
+    @Override
+    public int compare(Contact contact1, Contact contact2) {
+        int compared = contact1.getName().compareTo(contact2.getName());
+        return compared == 0 ? contact1.getEmail().compareTo(contact2.getEmail()) : compared;
+    }
+}

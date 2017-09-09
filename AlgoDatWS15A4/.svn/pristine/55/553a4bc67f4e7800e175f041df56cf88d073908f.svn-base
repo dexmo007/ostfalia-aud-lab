@@ -1,0 +1,67 @@
+package de.ostfalia.aud.ws15.test;
+
+import static org.junit.Assert.assertEquals;
+
+import java.io.IOException;
+import org.junit.Before;
+import org.junit.Test;
+
+import de.ostfalia.aud.ws15.MyContactList;
+
+public class MyContactListTest4Public {
+	
+	private String[] contact1 = {
+			"Lemann,David,DavidLemann@cuvox.de,\"Stresemannstr. 77\",66781,Wadgassen,\"06834 78 34 28\"",
+			"Luft,Alexander,AlexanderLuft@gustr.com,\"Konstanzer Strasse 93\",63872,Heimbuchenthal,\"06092 42 64 45\"",
+			"Eggers,Peter,PeterEggers@jourrapide.com,\"Paul-Nevermann-Platz 10\",97618,Heustreu,\"09773 78 85 73\"",
+			"Becker,Leon,LeonBecker@cuvox.de,\"Am Borsigturm 10\",46238,\"Bottrop Welheim\",\"02045 55 58 74\"",
+			"Lust,Alexander,AlexanderLust@gustr.com,\"Konstanzer Strasse 93\",63872,Heimbuchenthal,\"06092 42 64 45\""
+	};
+	
+	private String[] contact2 = {
+			"Lemann,David,DavidLemann@cuvox.de,\"Stresemannstr. 77\",66781,Wadgassen,\"06834 78 34 28\"",
+			"Lemann,Igor,IgorLemann@cuvox.de,\"Stresemannstr. 77\",66781,Wadgassen,\"06834 78 34 28\"",
+			"Kamann,Igor,IgorKamann@web.de,\"Stresemannstr. 77\",66781,Wadgassen,\"06834 78 34 28\"",
+			"Altmann,David,DavidAltmann@cuvox.de,\"Stresemannstr. 78\",66781,Wadgassen,\"06834 78 34 27\"",
+			
+	};
+
+	@Before
+	public void setUp() throws Exception {
+	}
+
+	@Test (timeout = 1000)
+	public void testCountEmailsStartingWith() throws IOException {
+		MyContactList mc = new MyContactList(contact1);
+		assertEquals("Üngültige Anzahl Einträge.", 5, mc.size());
+		assertEquals("Email beginnt mit XYZ: ", 0, 
+				mc.countEmailsStartingWith("XYZ"));
+		assertEquals("Email beginnt mit L: ", 1, 
+				mc.countEmailsStartingWith("L"));
+		assertEquals("Email beginnt mit Leon: ", 1, 
+				mc.countEmailsStartingWith("Leon"));
+		assertEquals("Email beginnt mit Luft: ", 0, 
+				mc.countEmailsStartingWith("Luft"));
+		assertEquals("Email beginnt mit Alexander: ", 2, 
+				mc.countEmailsStartingWith("Alexander"));
+		
+	}
+
+	@Test (timeout = 1000)
+	public void testGetEmailsWith() {
+		MyContactList mc = new MyContactList(contact2);
+		assertEquals("Üngültige Anzahl Einträge.", 4, mc.size());
+		
+		assertEquals("»: ", 4, mc.getEmailsWith("»").length);
+		assertEquals("»@»: ", 4, mc.getEmailsWith("»@»").length);
+		assertEquals("Igor»: ", 2, mc.getEmailsWith("Igor»").length);
+		assertEquals("David»: ", 2, mc.getEmailsWith("David»").length);
+		assertEquals("»@cuvox.de: ", 3, mc.getEmailsWith("»@cuvox.de").length);
+		assertEquals("»Lemann»: ", 2, mc.getEmailsWith("»Lemann»").length);
+		assertEquals("»Lemann»cuvox»: ", 2, mc.getEmailsWith("»Lemann»cuvox»").length);
+		assertEquals("»Lemann»web»: ", 0, mc.getEmailsWith("»Lemann»web»").length);
+		assertEquals("»Kamann»web»: ", 1, mc.getEmailsWith("»Kamann»web»").length);
+		
+	}
+		
+}

@@ -1,0 +1,101 @@
+package de.ostfalia.aud.ws15;
+
+import java.io.*;
+
+/**
+ * @author Henrik and Maxi
+ */
+public class MyContactList {
+
+    private Contact[] contacts;
+
+    /**
+     * contructor for a contact list
+     *
+     * @param filename
+     * @throws IOException
+     */
+    public MyContactList(String filename) throws IOException {
+        File file = new File(filename);
+        FileInputStream is = new FileInputStream(file);
+        int lines = 0;
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        while (br.readLine() != null) {
+            lines++;
+        }
+        br.close();
+        br = new BufferedReader(new FileReader(file));
+        contacts = new Contact[lines];
+        String[] currentLine;
+        String lineStr;
+        int line = 0;
+        while ((lineStr = br.readLine()) != null) {
+            currentLine = lineStr.split(",");
+            Contact currentContact = new Contact(currentLine);
+            contacts[line] = currentContact;
+            line++;
+        }
+    }
+     public int size() {
+         return contacts.length;
+     }
+
+    public String getName(String email) {
+        for (Contact element : contacts) {
+            if (element.getEmail().equalsIgnoreCase(email)) {
+                return element.getName();
+            }
+        }
+        // email not found
+        return null;
+    }
+
+    public String getEmail(String name) {
+        for (Contact element : contacts) {
+            if (element.getName().equals(name)) {
+                return element.getEmail();
+            }
+        }
+        // name not found
+        return null;
+    }
+
+    public void removeContactByMail(String mail) {
+        int foundCounter = 0;
+        for (int i = 0; i < contacts.length; i++) {
+            if (contacts[i].getEmail().equalsIgnoreCase(mail)) {
+                foundCounter++;
+            }
+        }
+        Contact[] newContacts = new Contact[contacts.length - foundCounter];
+        int counter = 0;
+        for (int i = 0; i < contacts.length; i++) {
+            if (!contacts[i].getEmail().equalsIgnoreCase(mail)) {
+                newContacts[counter] = contacts[i];
+                counter++;
+            }
+        }
+        contacts = newContacts;
+    }
+
+    //    public void removeContactByMail2(String mail) {
+//        Contact[] newContacts;
+//        for (int i = 0; i < contacts.length; i++) {
+//            if (contacts[i].getEmail().equalsIgnoreCase(mail)) {
+//                newContacts = new Contact[contacts.length - 1];
+//                newContacts.fill;
+//
+//            }
+//        }
+//
+//    }
+    public int countEntries(String name) {
+        int counter = 0;
+        for (Contact element : contacts) {
+            if (element.getName().equals(name)) {
+                counter++;
+            }
+        }
+        return counter;
+    }
+}
